@@ -15,4 +15,3 @@ def server_info():
 def getUser(user_id):
     # get a user by id
     return "{\"user_id\":1,\"name\":\"David\",\"position\":\"Developer\"}"
-
