@@ -7,6 +7,7 @@ from schemas.user_schema import UserSchema
 app = Flask(__name__)
 ma = Marshmallow(app)
 
+
 @app.route("/")
 def server_info():
     return "API Home"
