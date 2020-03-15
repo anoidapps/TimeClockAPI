@@ -1,5 +1,6 @@
 import datetime as dt
-
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
 class User:
 
@@ -102,3 +103,4 @@ class User:
 	# ????
 	def __repr__(self):
 		return "<User(name={self.name!r})>".format(self=self)
+

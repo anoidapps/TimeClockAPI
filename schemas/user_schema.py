@@ -12,6 +12,7 @@ class UserSchema(Schema):
 
 	first_name = fields.Str()
 	last_name = fields.Str()
-	email = fields.Email()
+	# Email -> STR
+	email = fields.Str()
 	phone = fields.Str()
 	created_at = fields.DateTime()
