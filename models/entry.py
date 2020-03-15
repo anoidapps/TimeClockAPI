@@ -1,8 +1,17 @@
 import datetime as dt
+from Server import db
 
 
 # Constructor
-class Entry:
+class Entry (db.Model):
+
+	entry_id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, unique=False)
+
+	start_time = db.Column(db.DateTime, uniuq=False)
+	end_time = db.Column(db.DateTime, uniuq=False)
+	break_length = db.Column(db.Integer, uniuq=False)
+
 	def __init__(self, entry_id, user_id, start_time, end_time):
 		self.entry_id = entry_id
 		self.user_id = user_id

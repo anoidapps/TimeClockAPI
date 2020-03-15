@@ -31,7 +31,7 @@ def server_info():
 	return "API Home"
 
 
-@app.route("/users/")
+@app.route("/users")
 def get_users():
 	user = db.session.query(User).all()
 	schema = UserSchema()
@@ -47,7 +47,7 @@ def get_user(user_id):
 	return str(result)
 
 
-@app.route("/organizations/")
+@app.route("/organizations")
 def get_organizations():
 	organization = db.session.query(Organization).all()
 	schema = OrganizationSchema()
@@ -63,7 +63,22 @@ def get_org(org_id):
 	return str(result)
 
 
-@app.route("/test/")
+# Needs Testing
+@app.route("/organizations", methods=['POST'])
+def create_org():
+	schema = OrganizationSchema()
+	content = request.get_json()
+	result = schema.load(content)
+	db.session.add(result)
+	db.session.flush()
+	db.session.commit()
+	schema = OrganizationSchema()
+	obj_result = schema.dumps(result)
+
+	return obj_result
+
+
+@app.route("/test")
 def test():
 	user = User(first_name="David", last_name="Hileman", email="Dhileman@anoidapps.com")
 	organization = Organization(name="AnoidApps")
