@@ -1,7 +1,16 @@
 import datetime as dt
+from Server import db
 
 
-class Job:
+class Job (db.Model):
+
+	user_id = db.Column(db.Integer, primary_key=True)
+	username = db.Column(db.String(80), unique=True)
+	password_hash = db.Column(db.Integer, unique=False)
+	salt = db.Column(db.Integer, unique=False)
+
+	org_id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(120), unique=False)
 
 	# Constructor
 	def __init__(self, job_id, name, org_id):

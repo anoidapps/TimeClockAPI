@@ -1,4 +1,6 @@
 from flask import Flask
+from flask_cors import CORS
+
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -8,6 +10,7 @@ from schemas.organization_schema import OrganizationSchema
 
 
 app = Flask(__name__)
+CORS(app)
 ma = Marshmallow(app)
 
 # postgres://YourUserName:YourPassword@YourHost:5432/YourDatabase
@@ -28,19 +31,35 @@ def server_info():
 	return "API Home"
 
 
+@app.route("/users/")
+def get_users():
+	user = db.session.query(User).all()
+	schema = UserSchema()
+	result = schema.dumps(user, many=True)
+	return str(result)
+
+
 @app.route("/users/<int:user_id>")
 def get_user(user_id):
 	user = db.session.query(User).get(user_id)
 	schema = UserSchema()
-	result = schema.dump(user)
+	result = schema.dumps(user)
 	return str(result)
 
 
-@app.route("/organization/<int:org_id>")
+@app.route("/organizations/")
+def get_organizations():
+	organization = db.session.query(Organization).all()
+	schema = OrganizationSchema()
+	result = schema.dumps(organization, many=True)
+	return str(result)
+
+
+@app.route("/organizations/<int:org_id>")
 def get_org(org_id):
 	organization = db.session.query(Organization).get(org_id)
-	schema = OrganizationSchema
-	result = schema.dump(organization)
+	schema = OrganizationSchema()
+	result = schema.dumps(organization)
 	return str(result)
 
 
@@ -48,11 +67,15 @@ def get_org(org_id):
 def test():
 	user = User(first_name="David", last_name="Hileman", email="Dhileman@anoidapps.com")
 	organization = Organization(name="AnoidApps")
+	organization2 = Organization(name="TheHilemanHour")
 	db.session.add(user)
 	db.session.commit()
 
 	db.session.add(organization)
 	db.session.commit()
-	return str(user) + "\n\n" + str(organization)
+
+	db.session.add(organization2)
+	db.session.commit()
+	return str(user) + "\n\n" + str(organization) + "\n\n" + str(organization2)
 
 
