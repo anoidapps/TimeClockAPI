@@ -4,9 +4,10 @@ import datetime as dt
 class Job:
 
 	# Constructor
-	def __init__(self, job_id, name):
+	def __init__(self, job_id, name, org_id):
 		self.job_id = job_id
 		self.name = name
+		self.org_id = org_id
 		self.created_at = dt.datetime.now()
 
 		self.description = None
@@ -29,6 +30,14 @@ class Job:
 	# Returns the Name:
 	def __getName__(self):
 		return self.name
+
+	# Sets the Org ID:
+	def __setOrgID__(self, org_id):
+		self.org_id = org_id
+
+	# Returns the Org ID:
+	def __getOrgID__(self):
+		return self.org_id
 
 	# Sets the description:
 	def __setDescription__(self, description):

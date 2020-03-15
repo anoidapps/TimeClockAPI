@@ -1,11 +1,15 @@
 import datetime as dt
+from Server import db
 
 
-class Organization:
+class Organization (db.Model):
+
+	org_id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(120), unique=False)
 
 	# Constructor
-	def __init__(self, org_id, name):
-		self.org_id = org_id
+	def __init__(self, name):
+		self.org_id = None
 		self.name = name
 		self.created_at = dt.datetime.now()
 

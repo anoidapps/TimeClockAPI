@@ -2,7 +2,25 @@ import datetime as dt
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-class User:
+from Server import db
+
+
+class User(db.Model):
+
+	user_id = db.Column(db.Integer, primary_key=True)
+	username = db.Column(db.String(80), unique=True)
+	password_hash = db.Column(db.Integer, unique=False)
+	salt = db.Column(db.Integer, unique=False)
+
+	admin = db.Column(db.Boolean(120), unique=False)
+
+	# Foreign Key
+	org_id = db.Column(db.Integer, unique=False)
+
+	first_name = db.Column(db.String(80), unique=False)
+	last_name = db.Column(db.String(80), unique=False)
+	email = db.Column(db.String(120), unique=True)
+	phone = db.Column(db.String(120), unique=False)
 
 	# Constructor
 	def __init__(self, first_name, last_name, email):
@@ -102,5 +120,5 @@ class User:
 
 	# ????
 	def __repr__(self):
-		return "<User(name={self.name!r})>".format(self=self)
+		return "<User(name={self.first_name!r})>".format(self=self)
 
