@@ -1,13 +1,14 @@
 from flask import Flask
 from flask_cors import CORS
-
+from datetime import *
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
 from schemas.user_schema import UserSchema
 from schemas.organization_schema import OrganizationSchema
-
+from schemas.job_schema import JobSchema
+from schemas.entry_schema import EntrySchema
 
 app = Flask(__name__)
 CORS(app)
@@ -15,12 +16,14 @@ ma = Marshmallow(app)
 
 # postgres://YourUserName:YourPassword@YourHost:5432/YourDatabase
 # postgres://Chris:emma@192.168.1.100:5432/AnoidClock
-databaseConnection = "postgresql+psycopg2://Chris:emma@192.168.1.100:5432/AnoidClock"
+databaseConnection = "postgresql+psycopg2://Chris:emma@74.136.154.216:5432/AnoidClock"
 app.config['SQLALCHEMY_DATABASE_URI'] = databaseConnection
 db = SQLAlchemy(app)
 
 from models.user import User
 from models.organization import Organization
+from models.job import Job
+from models.entry import Entry
 
 db.create_all()
 db.session.commit()
@@ -33,9 +36,9 @@ def server_info():
 
 @app.route("/users")
 def get_users():
-	user = db.session.query(User).all()
+	users = db.session.query(User).all()
 	schema = UserSchema()
-	result = schema.dumps(user, many=True)
+	result = schema.dumps(users, many=True)
 	return str(result)
 
 
@@ -47,11 +50,55 @@ def get_user(user_id):
 	return str(result)
 
 
+@app.route("/users", methods=['POST'])
+def create_user():
+	schema = UserSchema()
+	content = request.get_json()
+	result = schema.load(content)
+	db.session.add(result)
+	db.session.flush()
+	db.session.commit()
+	schema = UserSchema()
+	obj_result = schema.dumps(result)
+
+	return obj_result
+
+
+# Needs Testing
+@app.route("/users/<int:user_id>", methods={'UPDATE'})
+def update_user(user_id, user_name, org_id, admin, first_name, last_name, email, phone):
+	user = db.session.query(User).get(user_id)
+	schema = UserSchema()
+
+	user.user_name = user_name
+	user.org_id = org_id
+	user.admin = admin
+	user.first_name = first_name
+	user.last_name = last_name
+	user.email = email
+	user.phone = phone
+
+	db.session.commit()
+	result = schema.dumps(user)
+	return str(result)
+
+
+# Needs Testing
+@app.route("/users/<int:user_id>", methods={'DELETE'})
+def delete_user(user_id):
+	user = db.session.query(User).get(user_id)
+	schema = UserSchema()
+	db.session.delete()
+	db.session.commit()
+	result = schema.dumps(user)
+	return str(result) + " was removed"
+
+
 @app.route("/organizations")
 def get_organizations():
-	organization = db.session.query(Organization).all()
+	organizations = db.session.query(Organization).all()
 	schema = OrganizationSchema()
-	result = schema.dumps(organization, many=True)
+	result = schema.dumps(organizations, many=True)
 	return str(result)
 
 
@@ -63,7 +110,6 @@ def get_org(org_id):
 	return str(result)
 
 
-# Needs Testing
 @app.route("/organizations", methods=['POST'])
 def create_org():
 	schema = OrganizationSchema()
@@ -78,11 +124,74 @@ def create_org():
 	return obj_result
 
 
+@app.route("/jobs")
+def get_jobs():
+	jobs = db.session.query(Job).all()
+	schema = JobSchema()
+	result = schema.dumps(jobs, many=True)
+	return str(result)
+
+
+@app.route("/jobs/<int:job_id>")
+def get_job(job_id):
+	job = db.session.query(Job).get(job_id)
+	schema = JobSchema()
+	result = schema.dumps(job)
+	return str(result)
+
+
+@app.route("/jobs", methods=['POST'])
+def create_job():
+	schema = JobSchema()
+	content = request.get_json()
+	result = schema.load(content)
+	db.session.add(result)
+	db.session.flush()
+	db.session.commit()
+	schema = JobSchema()
+	obj_result = schema.dumps(result)
+
+	return obj_result
+
+
+@app.route("/entries")
+def get_entries():
+	entries = db.session.query(Entry).all()
+	schema = EntrySchema()
+	result = schema.dumps(entries, many=True)
+	return str(result)
+
+
+@app.route("/entries/<int:entry_id>")
+def get_entry(entry_id):
+	entry = db.session.query(Entry).get(entry_id)
+	schema = EntrySchema()
+	result = schema.dumps(entry)
+	return str(result)
+
+
+# Needs Testing
+@app.route("/entries", methods=['POST'])
+def create_entry():
+	schema = EntrySchema()
+	content = request.get_json()
+	result = schema.load(content)
+	db.session.add(result)
+	db.session.flush()
+	db.session.commit()
+	schema = EntrySchema()
+	obj_result = schema.dumps(result)
+
+	return obj_result
+
+
 @app.route("/test")
 def test():
 	user = User(first_name="David", last_name="Hileman", email="Dhileman@anoidapps.com")
 	organization = Organization(name="AnoidApps")
 	organization2 = Organization(name="TheHilemanHour")
+	job = Job(name="TimeClockAPI_AnoidApps", org_id="1")
+	entry = Entry(user_id="1", start_time=datetime.today(), end_time=datetime.today())
 	db.session.add(user)
 	db.session.commit()
 
@@ -91,6 +200,12 @@ def test():
 
 	db.session.add(organization2)
 	db.session.commit()
-	return str(user) + "\n\n" + str(organization) + "\n\n" + str(organization2)
+
+	db.session.add(job)
+	db.session.commit()
+
+	db.session.add(entry)
+	db.session.commit()
+	return str(user) + "\n\n" + str(organization) + "\n\n" + str(organization2) + "\n\n" + str(job) + "\n\n" + str(entry)
 
 

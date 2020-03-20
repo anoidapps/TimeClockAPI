@@ -12,12 +12,12 @@ class Job (db.Model):
 	address = db.Column(db.String(200), unique=False)
 
 	# Passing a Double into a Float, or a Float into a Double
-	latitude = db.Column(db.Double, unique=False)
-	longitude = db.Column(db.Double, unique=False)
+	latitude = db.Column(db.Float, unique=False)
+	longitude = db.Column(db.Float, unique=False)
 
 	# Constructor
-	def __init__(self, job_id, name, org_id):
-		self.job_id = job_id
+	def __init__(self, name, org_id):
+		self.job_id = None
 		self.name = name
 		self.org_id = org_id
 		self.created_at = dt.datetime.now()

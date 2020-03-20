@@ -8,12 +8,12 @@ class Entry (db.Model):
 	entry_id = db.Column(db.Integer, primary_key=True)
 	user_id = db.Column(db.Integer, unique=False)
 
-	start_time = db.Column(db.DateTime, uniuq=False)
-	end_time = db.Column(db.DateTime, uniuq=False)
-	break_length = db.Column(db.Integer, uniuq=False)
+	start_time = db.Column(db.DateTime, unique=False)
+	end_time = db.Column(db.DateTime, unique=False)
+	break_length = db.Column(db.Integer, unique=False)
 
-	def __init__(self, entry_id, user_id, start_time, end_time):
-		self.entry_id = entry_id
+	def __init__(self, user_id, start_time, end_time):
+		self.entry_id = None
 		self.user_id = user_id
 
 		self.start_time = start_time
