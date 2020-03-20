@@ -66,7 +66,7 @@ def create_user():
 
 # Needs Testing
 @app.route("/users/<int:user_id>", methods={'UPDATE'})
-def update_user(user_id, user_name, org_id, admin, first_name, last_name, email, phone):
+def update_user(user_id, user_name, org_id, admin, first_name, last_name, email, phone, break_length):
 	user = db.session.query(User).get(user_id)
 	schema = UserSchema()
 
@@ -77,6 +77,7 @@ def update_user(user_id, user_name, org_id, admin, first_name, last_name, email,
 	user.last_name = last_name
 	user.email = email
 	user.phone = phone
+	user.break_length = break_length
 
 	db.session.commit()
 	result = schema.dumps(user)
