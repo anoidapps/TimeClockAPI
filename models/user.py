@@ -21,6 +21,7 @@ class User(db.Model):
 	last_name = db.Column(db.String(80), unique=False)
 	email = db.Column(db.String(120), unique=True)
 	phone = db.Column(db.String(120), unique=False)
+	break_length = db.Column(db.Integer, unique=False)
 
 	# Constructor
 	def __init__(self, first_name, last_name, email):
@@ -36,6 +37,7 @@ class User(db.Model):
 		self.last_name = last_name
 		self.email = email
 		self.phone = None
+		self.break_length = None
 		self.created_at = dt.datetime.now()
 
 	# Sets the user's User ID:
@@ -117,6 +119,14 @@ class User(db.Model):
 	# Returns the user's Email Address:
 	def __getEmail__(self):
 		return self.email
+
+	# Sets the user's Break Length Address:
+	def __setBreakLength__(self, break_length):
+		self.break_length = break_length
+
+	# Returns the user's Break Length Address:
+	def __getBreakLength__(self):
+		return self.break_length
 
 	# ????
 	def __repr__(self):

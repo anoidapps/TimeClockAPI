@@ -15,4 +15,7 @@ class UserSchema(Schema):
 	# Email -> STR
 	email = fields.Str()
 	phone = fields.Str()
+
+	break_length = fields.Int()
+
 	created_at = fields.DateTime()
