@@ -16,13 +16,13 @@ class Job (db.Model):
 	longitude = db.Column(db.Float, unique=False)
 
 	# Constructor
-	def __init__(self, name, org_id):
+	def __init__(self, name, description, org_id):
 		self.job_id = None
 		self.name = name
 		self.org_id = org_id
 		self.created_at = dt.datetime.now()
 
-		self.description = None
+		self.description = description
 		self.address = None
 		self.latitude = None
 		self.longitude = None
