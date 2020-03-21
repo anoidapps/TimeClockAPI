@@ -6,6 +6,7 @@ class JobSchema(Schema):
 	name = fields.Str()
 	description = fields.Str()
 	address = fields.Str()
+	org_id = fields.Int()
 
 	latitude = fields.Float()
 	longitude = fields.Float()
