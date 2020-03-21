@@ -12,3 +12,8 @@ class JobSchema(Schema):
 	longitude = fields.Float()
 
 	created_at = fields.DateTime()
+	
+	@post_load
+	def make_job(self, data, **kwargs):
+		from models.job import Job
+		return Job(**data)
