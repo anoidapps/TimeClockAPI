@@ -149,7 +149,10 @@ def get_job(job_id):
 def create_job():
 	schema = JobSchema()
 	content = request.get_json()
+	print("Create Job")
+	print(content)
 	result = schema.load(content)
+	print(result)
 	db.session.add(result)
 	db.session.flush()
 	db.session.commit()
