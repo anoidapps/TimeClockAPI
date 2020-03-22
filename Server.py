@@ -4,6 +4,8 @@ from datetime import *
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+import hashlib
+import os
 
 from schemas.user_schema import UserSchema
 from schemas.organization_schema import OrganizationSchema
@@ -56,8 +58,16 @@ def get_user(user_id):
 def create_user():
 	schema = UserSchema()
 	content = request.get_json()
-	result = schema.load(content)
-	db.session.add(result)
+	user = schema.load(content)
+
+	#create salt and hash
+	salt = os.urandom(32)
+	password = user.__getPassword__()
+	password_hash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+	user.__setSalt__(salt)
+	user.__setPasswordHash__(password_hash)
+
+	db.session.add(user)
 	db.session.flush()
 	db.session.commit()
 	schema = UserSchema()
