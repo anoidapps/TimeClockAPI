@@ -10,7 +10,7 @@ class User(db.Model):
 	user_id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(80), unique=True)
 	password_hash = db.Column(db.Integer, unique=False)
-	salt = db.Column(db.Integer, unique=False)
+	salt = db.Column(db.String(32), unique=False)
 
 	admin = db.Column(db.Boolean(120), unique=False)
 
@@ -39,6 +39,7 @@ class User(db.Model):
 		self.phone = None
 		self.break_length = None
 		self.created_at = dt.datetime.now()
+		self.password = None
 
 	# Sets the user's User ID:
 	def __setUserID__(self, user_id):
@@ -127,6 +128,14 @@ class User(db.Model):
 	# Returns the user's Break Length Address:
 	def __getBreakLength__(self):
 		return self.break_length
+
+	# Sets the user's Password Hash:
+	def __setPassword__(self, password):
+		self.password = password
+
+	# Returns the user's Password Hash:
+	def __getPassword__(self):
+		return self.password
 
 	# ????
 	def __repr__(self):
