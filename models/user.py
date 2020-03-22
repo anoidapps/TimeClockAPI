@@ -134,7 +134,7 @@ class User(db.Model):
 		self.password = password
 
 	# Returns the user's Password Hash:
-	def get_password(self):
+	def __getPassword__(self):
 		return self.password
 
 	# ????

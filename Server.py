@@ -58,22 +58,20 @@ def get_user(user_id):
 def create_user():
 	schema = UserSchema()
 	content = request.get_json()
-	print(content)
 	user = schema.load(content)
-	print(user)
 
 	#create salt and hash
 	salt = os.urandom(32)
-	password = user.get_password()
+	password = user["password"]
 	password_hash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
-	user.__setSalt__(salt)
-	user.__setPasswordHash__(password_hash)
+	user["salt"] = salt
+	user["password_hash"] = password_hash
 
 	db.session.add(user)
 	db.session.flush()
 	db.session.commit()
 	schema = UserSchema()
-	obj_result = schema.dumps(result)
+	obj_result = schema.dumps(user)
 
 	return obj_result
 
