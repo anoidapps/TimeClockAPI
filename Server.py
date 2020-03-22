@@ -62,7 +62,7 @@ def create_user():
 
 	#create salt and hash
 	salt = os.urandom(32)
-	password = user.__getPassword__()
+	password = user.get_password()
 	password_hash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
 	user.__setSalt__(salt)
 	user.__setPasswordHash__(password_hash)
