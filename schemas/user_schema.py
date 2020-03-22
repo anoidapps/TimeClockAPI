@@ -6,7 +6,7 @@ class UserSchema(Schema):
 	org_id = fields.Int()
 	admin = fields.Bool()
 
-	user_name = fields.Str()
+	username = fields.Str()
 	password = fields.Str()
 	password_hash = fields.Str()
 	salt = fields.Str()
