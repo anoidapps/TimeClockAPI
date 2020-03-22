@@ -58,7 +58,9 @@ def get_user(user_id):
 def create_user():
 	schema = UserSchema()
 	content = request.get_json()
+	print(content)
 	user = schema.load(content)
+	print(user)
 
 	#create salt and hash
 	salt = os.urandom(32)
