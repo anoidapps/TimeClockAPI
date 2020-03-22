@@ -38,8 +38,9 @@ def server_info():
 
 @app.route("/users")
 def get_users():
-	#get all users by org id
-	org_id = request.args.get('org-id', default = 0, type = int)
+
+	# get all users by org id
+	org_id = request.args.get('org-id', default=0, type=int)
 	users = db.session.query(User).filter(User.org_id == org_id).all()
 	schema = UserSchema()
 	result = schema.dumps(users, many=True)
@@ -60,7 +61,7 @@ def create_user():
 	content = request.get_json()
 	user = schema.load(content)
 
-	#create salt and hash
+	# create salt and hash
 	salt = os.urandom(32)
 	password = user["password"]
 	password_hash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
@@ -139,8 +140,8 @@ def create_org():
 
 @app.route("/jobs")
 def get_jobs():
-	#get all jobs by org id
-	org_id = request.args.get('org-id', default = 0, type = int)
+	# get all jobs by org id
+	org_id = request.args.get('org-id', default=0, type=int)
 	jobs = db.session.query(Job).filter(Job.org_id == org_id).all()
 	schema = JobSchema()
 	result = schema.dumps(jobs, many=True)
@@ -174,8 +175,9 @@ def create_job():
 
 @app.route("/entries")
 def get_entries():
-	#get all entries by user id
-	user_id = request.args.get('user-id', default = 0, type = int)
+
+	# get all entries by user id
+	user_id = request.args.get('user-id', default=0, type=int)
 	entries = db.session.query(Entry).filter(Entry.user_id == user_id).all()
 	schema = EntrySchema()
 	result = schema.dumps(entries, many=True)
@@ -213,6 +215,9 @@ def test():
 	job = Job(name="TimeClockAPI_AnoidApps", org_id="1")
 	entry = Entry(user_id="1", start_time=datetime.today(), end_time=datetime.today())
 	db.session.add(user)
+
+	user.__setPassword__("nqeiowen")
+	print(user.__getPassword__())
 	db.session.commit()
 
 	db.session.add(organization)

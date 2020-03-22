@@ -10,9 +10,10 @@ class User(db.Model):
 	user_id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(80), unique=True)
 	password_hash = db.Column(db.String(64), unique=False)
+	password_hash = db.Column(db.String, unique=False)
 	salt = db.Column(db.String(32), unique=False)
 
-	admin = db.Column(db.Boolean(120), unique=False)
+	admin = db.Column(db.Boolean, unique=False)
 
 	# Foreign Key
 	org_id = db.Column(db.Integer, unique=False)
@@ -24,22 +25,33 @@ class User(db.Model):
 	break_length = db.Column(db.Integer, unique=False)
 
 	# Constructor
-	def __init__(self, first_name, last_name, email):
+	def __init__(self, username, password, first_name, last_name, email, phone, admin, org_id):
 		self.user_id = None
-		self.user_name = None
+		self.username = username
+		self.password = password
 		self.password_hash = None
 		self.salt = None
 
-		self.org_id = None
-		self.admin = False
+		self.org_id = org_id
+		self.admin = admin
 
 		self.first_name = first_name
 		self.last_name = last_name
 		self.email = email
-		self.phone = None
+		self.phone = phone
 		self.break_length = None
+
 		self.created_at = dt.datetime.now()
-		self.password = None
+
+	# # Testing Constructor
+	# def __schemaInit__(self, admin, email, first_name, last_name, org_id, password, phone, username):
+	# 	user = User(first_name, last_name, email)
+	# 	user.__setUserName__(username)
+	# 	user.__setPassword__(password)
+	# 	user.__setOrgID__(org_id)
+	# 	user.__setAdminStatus__(admin)
+	# 	user.__setPhone__(phone)
+	# 	return user
 
 	# Sets the user's User ID:
 	def __setUserID__(self, user_id):
